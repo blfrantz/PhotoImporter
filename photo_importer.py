@@ -15,7 +15,7 @@ from tqdm import tqdm
 
 SONY_TASKS = [
   {
-    'src': 'K:\\DCIM\\100MSDCF',
+    'src': 'K:\\DCIM',
     'ext': 'ARW',
     'dest': 'O:\\Personal Data\\Pictures'
   },
@@ -28,14 +28,14 @@ SONY_TASKS = [
 
 PANA_TASKS = [
   {
-    'src': 'K:\\DCIM\\120_PANA',
+    'src': 'K:\\DCIM',
     'ext': 'RW2',
     'dest': 'O:\\Personal Data\\Pictures'
   },
   {
-    'src': 'K:\\DCIM\\121_PANA',
-    'ext': 'RW2',
-    'dest': 'O:\\Personal Data\\Pictures'
+    'src': 'K:\\DCIM',
+    'ext': 'MP4',
+    'dest': 'O:\\Video Editing\\Raw'
   },
   {
     'src': 'K:\\PRIVATE\\AVCHD\\BDMV\\STREAM',
@@ -62,11 +62,19 @@ class PhotoImporter:
     i = 1
     for task in self._tasks:
       print('Running task {} of {}'.format(i, len(self._tasks)))
-      for f in tqdm(os.listdir(task['src'])):
-        file_path = os.path.join(task['src'], f)
-        if os.path.isfile(file_path) and f.endswith(task['ext']):
-            self.import_file(file_path, task['dest'])
+      if not os.path.isdir(task['src']):
+        print("Skipping " + task['src'] + ", doesn't exist.")
+        continue
+      self.recursive_import(task['src'], task['dest'], task['ext'])
       i = i + 1
+
+  def recursive_import(self, path, dest, ext):
+    for f in tqdm(os.listdir(path)):
+      appended_path = os.path.join(path, f)
+      if os.path.isfile(appended_path) and f.endswith(ext):
+        self.import_file(appended_path, dest)
+      elif os.path.isdir(appended_path):
+        self.recursive_import(appended_path, dest, ext)
 
   def import_file(self, file_path, dest):
     new_name = self.rename(file_path)
