@@ -26,6 +26,21 @@ SONY_TASKS = [
   }
 ]
 
+GOPRO_TASKS = [
+  {
+    'src': 'K:\\DCIM',
+    'ext': 'JPG',
+    'dest': 'O:\\Personal Data\\Pictures',
+	'prefix': 'gopro_'
+  },
+  {
+    'src': 'K:\\DCIM',
+    'ext': 'MP4',
+    'dest': 'O:\\Video Editing\\Raw',
+	'prefix': 'gopro_'
+  }
+]
+
 PANA_TASKS = [
   {
     'src': 'K:\\DCIM',
@@ -65,19 +80,19 @@ class PhotoImporter:
       if not os.path.isdir(task['src']):
         print("Skipping " + task['src'] + ", doesn't exist.")
         continue
-      self.recursive_import(task['src'], task['dest'], task['ext'])
+      self.recursive_import(task['src'], task['dest'], task['ext'], task.get('prefix', ''))
       i = i + 1
 
-  def recursive_import(self, path, dest, ext):
+  def recursive_import(self, path, dest, ext, prefix):
     for f in tqdm(os.listdir(path)):
       appended_path = os.path.join(path, f)
       if os.path.isfile(appended_path) and f.endswith(ext):
-        self.import_file(appended_path, dest)
+        self.import_file(appended_path, dest, prefix)
       elif os.path.isdir(appended_path):
-        self.recursive_import(appended_path, dest, ext)
+        self.recursive_import(appended_path, dest, ext, prefix)
 
-  def import_file(self, file_path, dest):
-    new_name = self.rename(file_path)
+  def import_file(self, file_path, dest, prefix):
+    new_name = self.rename(file_path, prefix)
     new_path = os.path.join(dest, new_name)
 
     try:
@@ -97,7 +112,7 @@ class PhotoImporter:
       else:
         shutil.copy2(src, dest)
 
-  def rename(self, file_path):
+  def rename(self, file_path, prefix):
     """ Define your rename logic here."""
 
     file_ext = os.path.splitext(os.path.basename(file_path))[1]
@@ -114,7 +129,7 @@ class PhotoImporter:
 
     year = mod_time.strftime('%Y')
     month = mod_time.strftime('%B')
-    new_name = date_str + '-' + count_str + file_ext
+    new_name = prefix + date_str + '-' + count_str + file_ext
 
     return  os.path.join(year, month, new_name)
 
@@ -128,5 +143,7 @@ if __name__ == "__main__":
     PhotoImporter(SONY_TASKS).run()
   elif args.cam =='pana' or args.cam == 'panasonic':
     PhotoImporter(PANA_TASKS).run()
+  elif args.cam =='gopro':
+    PhotoImporter(GOPRO_TASKS).run()
   else:
     'Camera not recognized.'
