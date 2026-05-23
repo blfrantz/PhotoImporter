@@ -1,7 +1,13 @@
+# /// script
+# requires-python = ">=3.9"
+# dependencies = [
+#     "tqdm>=4.23.4",
+# ]
+# ///
 """
 A simple script for importing photos from a memory card
 to a computer.  Source/destinations are configured via constants
-to make the CLI dead-simple under the assumption that these 
+to make the CLI dead-simple under the assumption that these
 won't change much, but an argparse interface could be added
 for improved flexibility.
 """
@@ -13,49 +19,52 @@ import argparse
 
 from tqdm import tqdm
 
+REMOVABLE_DRIVE = 'J'
+OUTPUT_DRIVE = 'O'
+
 SONY_TASKS = [
   {
-    'src': 'K:\\DCIM',
+    'src': f'{REMOVABLE_DRIVE}:\\DCIM',
     'ext': 'ARW',
-    'dest': 'O:\\Personal Data\\Pictures'
+    'dest': f'{OUTPUT_DRIVE}:\\Personal Data\\Pictures'
   },
   {
-    'src': 'K:\\PRIVATE\\M4ROOT\\CLIP',
+    'src': f'{REMOVABLE_DRIVE}:\\PRIVATE\\M4ROOT\\CLIP',
     'ext': 'MP4',
-    'dest': 'O:\\Video Editing\\Raw'
+    'dest': f'{OUTPUT_DRIVE}:\\Video Editing\\Raw'
   }
 ]
 
 GOPRO_TASKS = [
   {
-    'src': 'K:\\DCIM',
+    'src': f'{REMOVABLE_DRIVE}:\\DCIM\\100GOPRO',
     'ext': 'JPG',
-    'dest': 'O:\\Personal Data\\Pictures',
-	'prefix': 'gopro_'
+    'dest': f'{OUTPUT_DRIVE}:\\Personal Data\\Pictures',
+	  'prefix': 'gopro_'
   },
   {
-    'src': 'K:\\DCIM',
+    'src': f'{REMOVABLE_DRIVE}:\\DCIM\\100GOPRO',
     'ext': 'MP4',
-    'dest': 'O:\\Video Editing\\Raw',
-	'prefix': 'gopro_'
+    'dest': f'{OUTPUT_DRIVE}:\\Video Editing\\Raw',
+	  'prefix': 'gopro_'
   }
 ]
 
 PANA_TASKS = [
   {
-    'src': 'K:\\DCIM',
+    'src': f'{REMOVABLE_DRIVE}:\\DCIM',
     'ext': 'RW2',
-    'dest': 'O:\\Personal Data\\Pictures'
+    'dest': f'{OUTPUT_DRIVE}:\\Personal Data\\Pictures'
   },
   {
-    'src': 'K:\\DCIM',
+    'src': f'{REMOVABLE_DRIVE}:\\DCIM',
     'ext': 'MP4',
-    'dest': 'O:\\Video Editing\\Raw'
+    'dest': f'{OUTPUT_DRIVE}:\\Video Editing\\Raw'
   },
   {
-    'src': 'K:\\PRIVATE\\AVCHD\\BDMV\\STREAM',
+    'src': f'{REMOVABLE_DRIVE}:\\PRIVATE\\AVCHD\\BDMV\\STREAM',
     'ext': 'MTS',
-    'dest': 'O:\\Video Editing\\Raw'
+    'dest': f'{OUTPUT_DRIVE}:\\Video Editing\\Raw'
   }
 ]
 
